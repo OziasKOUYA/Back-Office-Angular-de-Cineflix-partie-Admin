@@ -1,0 +1,180 @@
+<div class="content-wrapper">
+  <div *ngIf="page === 'liste'">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title" style="font-size: 1.8rem; float: left; color:blueviolet">Tickets</h1>
+            <i (click)="pageAjout()" class="mdi mdi-plus-circle" style="float: right; color:green; font-size: 5em"></i>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr style="background-color: black; color: azure;">
+                  <th>
+                    #
+                  </th>
+                  <th>
+                    Numero
+                  </th>
+                  <th>
+                    type
+                  </th>
+                  <th>
+                    prix
+                  </th>
+                  <th>
+                    heure
+                  </th>
+                  <th>
+                    date
+                  </th>
+                  <th>
+                    film
+                  </th>
+                  <th>
+                    Actions
+                  </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 1.8rem;">
+                <ng-container *ngFor="let tickets of tableauTickets; let ind=index;">
+                  <tr>
+                    <td style="font-size: 1.5rem;">
+                      {{ind+1}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{tickets.numero}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{tickets.type}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{tickets.prix}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{ getProjectionHeure(tickets.projection) }}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{ getProjectionDate(tickets.projection) }}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{ getFilmATitre( getFilm(tickets.projection) )}}
+                    </td>
+                    <th>
+                      <i style="color: green;" class="mdi mdi-brush" (click)="pageModif(tickets)"></i>
+
+
+                      <i style="color: red;" class="mdi mdi-delete-forever" (click)="pageSup(tickets)"></i>
+                    </th>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="page === 'ajout'">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Nouveau Ticket</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;">
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Numero</label>
+              <div class="col-sm-9">
+                <input type="number"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsername" [(ngModel)]="nouveauTickets.numero" placeholder="Date"  name="date">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Type</label>
+              <div class="col-sm-9">
+                <select class="form-control"  style="font-size: 1.2em; height: auto" [(ngModel)]="nouveauTickets.type" name="type">
+                  <option Value="vip">VIP</option>
+                  <option Value="vvip">VVIP</option>
+                  <option Value="vvvip">VVVIP</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Projection</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em; height: auto" [(ngModel)]="nouveauTickets.projection" name="projection" required>
+                  <option *ngFor="let projection of projections" [value]="projection.id">{{(getFilmBTitre(projection.film))}} - - -  {{ projection.date }}  - - -  {{ projection.heure }}   </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Prix</label>
+              <div class="col-sm-9">
+                <input type="number"  style="font-size: 1.5em;" class="form-control" id="exampleInpuUsername" [(ngModel)]="nouveauTickets.prix" placeholder="Prix"  name="prix">
+              </div>
+            </div>
+            <button type="submit" (click)="add()" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="ticketsSelectionne">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Nouveau Ticket</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;" >
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Numero</label>
+              <div class="col-sm-9">
+                <input type="number"  style="font-size: 1.5em;" class="form-control" id="exampleInutUsername" [(ngModel)]="ticketsSelectionne.numero" placeholder="Date"  name="date">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Type</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;" [(ngModel)]="ticketsSelectionne.type" name="type">
+                  <option Value="vip">VIP</option>
+                  <option Value="vvip">VVIP</option>
+                  <option Value="vvvip">VVVIP</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Projection</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;" [(ngModel)]="ticketsSelectionne.projection" name="projection" required>
+                  <option *ngFor="let projection of projections" [value]="projection.id">{{(getFilmBTitre(projection.film))}} - - - {{ projection.date }} - - - {{ projection.heure }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Prix</label>
+              <div class="col-sm-9">
+                <input type="number"  style="font-size: 1.5em;" class="form-control" id="exampleInpuUsernme" [(ngModel)]="ticketsSelectionne.prix" placeholder="Prix"  name="prix">
+              </div>
+            </div>
+            <button type="submit" (click)="update(ticketsSelectionne.id,ticketsSelectionne)" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="page ==='suppression'">
+  <div *ngIf="ticketSup">
+      <h2>Supprimer  tickets :</h2>
+          <p>{{ ticketSup.numero }}</p>
+          <button (click)="delete(ticketSup.id)">Confirmer</button>
+          <button (click)="annuler()">Annuler</button>
+      </div>
+    </div>
+</div>
+
+
+

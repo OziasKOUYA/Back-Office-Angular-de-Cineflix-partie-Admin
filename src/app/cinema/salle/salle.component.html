@@ -1,0 +1,122 @@
+<div class="content-wrapper">
+  <div *ngIf="page === 'liste'">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title" style="font-size: 1.8rem; float: left; color:blueviolet">Salles</h1>
+            <i (click)="pageAjout()" class="mdi mdi-plus-circle" style="float: right; color:green; font-size: 5em"></i>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr style="background-color: black; color: azure;">
+                  <th>
+                    N°
+                  </th>
+                  <th>
+                    Libellé
+                  </th>
+                  <th>
+                    Capacités
+                  </th>
+                  <th>
+                    Actions
+                  </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 1.8rem;">
+                <ng-container *ngFor="let salle of tableausalles; let ind=index">
+                  <tr>
+                    <td style="font-size: 1.5rem;">
+                      {{ind+1}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{salle.libelle}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{salle.nombre_de_place}} Places
+                    </td>
+
+                    <th>
+                      <i style="color: green;" class="mdi mdi-brush" (click)="pageModif(salle)"></i>
+
+
+                      <i style="color: red;" class="mdi mdi-delete-forever" (click)="pageSup(salle)"></i>
+                    </th>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="page === 'ajout'">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Nouvelle salle</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;" (ngSubmit)="add()">
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Libelle</label>
+              <div class="col-sm-9">
+                <input type="text" style="font-size: 1.5em;" class="form-control" id="e" [(ngModel)]="nouvelleSalle.libelle" placeholder="Libellé"  name="libelle">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Capacité</label>
+              <div class="col-sm-9">
+                <input type="number" style="font-size: 1.5em;" class="form-control" id="examp" [(ngModel)]="nouvelleSalle.nombre_de_place" placeholder="nombre de places"  name="capacite">
+              </div>
+            </div>
+            <button type="submit" (click)="add()" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="page ==='modifier'">
+    <div *ngIf="salleSelectionnee">
+      <!-- Votre formulaire d'ajout ici -->
+      <div class="col-md-8 mx-auto" style="justify-content: center;">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Modification Salle</h4><br><br><br><br>
+            <form class="forms-sample" style="margin: top 30px; ">
+              <div class="form-group row">
+                <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Libellé</label>
+                <div class="col-sm-9">
+                  <input type="text" style="font-size: 1.5em;" [(ngModel)]="salleSelectionnee.libelle" class="form-control" id="exampleInputUserna"  name="libelle">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Capacité</label>
+                <div class="col-sm-9">
+                  <input type="text" style="font-size: 1.5em;" [(ngModel)]="salleSelectionnee.nombre_de_place" class="form-control" id="exampleInputUsername"  name="capacite">
+                </div>
+              </div>
+              <button type="submit" (click)="update(salleSelectionnee.id,salleSelectionnee)" class="btn btn-primary mr-2">Update</button>
+              <button class="btn btn-light" (click)="annuler()">Cancel</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="page ==='suppression'">
+    <div *ngIf="salleSup">
+      <h2>Supprimer  salle :</h2>
+      <p>{{ salleSup.libelle }}</p>
+      <button (click)="delete(salleSup.id)">Confirmer</button>
+      <button (click)="annuler()">Annuler</button>
+    </div>
+  </div>
+</div>
+

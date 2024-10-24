@@ -1,0 +1,6 @@
+.film-affiche{
+  width: 100px; /* ou toute autre taille souhaitée */
+  height: 100px; /* même taille pour assurer une forme carrée */
+  object-fit: cover; /* couvre toute la zone sans déformation */
+  border-radius: 0; /* pour des coins non arrondis */
+}

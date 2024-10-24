@@ -1,0 +1,22 @@
+<div class="container-scroller d-flex">
+  <!-- partial:./partials/_sidebar.html -->
+  <div style="background-color:#223e9c;">
+    <app-side></app-side>
+  </div>
+
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:./partials/_navbar.html -->
+    <app-nav></app-nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <router-outlet></router-outlet>
+      <!-- content-wrapper ends -->
+      <!-- partial:./partials/_footer.html -->
+      <app-footer></app-footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>

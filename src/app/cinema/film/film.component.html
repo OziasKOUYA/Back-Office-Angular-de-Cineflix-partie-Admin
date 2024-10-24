@@ -1,0 +1,178 @@
+<div class="content-wrapper">
+  <div *ngIf="page === 'liste'">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title" style="font-size: 1.8rem; float: left; color:blueviolet">Films</h1>
+            <i (click)="pageAjout()" class="mdi mdi-plus-circle" style="float: right; color:green; font-size: 5em"></i>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr style="background-color: black; color: azure;">
+                  <th>
+                    N°
+                  </th>
+                  <th>
+                    Affiche
+                  </th>
+                  <th>
+                    Titre
+                  </th>
+                  <th>
+                    Description
+                  </th>
+                  <th>
+                    Acteur Principal
+                  </th>
+                  <th>
+                    Duree
+                  <th>
+                    Actions
+                  </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 1.8rem;">
+                <ng-container *ngFor="let film of tableaufilms; let ind=index">
+                  <tr>
+                    <td style="font-size: 1.5rem;">
+                      {{ind+1}}
+                    </td>
+                    <td >
+                       <img src="{{film.affiche}}" alt="{{ film.titre }} affiche" class="film-affiche">
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{film.titre}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{film.description}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{film.acteur_principal}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{film.duree }}
+                    </td>
+
+                    <th>
+                      <i style="color: green;" class="mdi mdi-brush" (click)="pageModif(film)"></i>
+
+
+                      <i style="color: red;" class="mdi mdi-delete-forever" (click)="pageSup(film)"></i>
+                    </th>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="page === 'ajout'">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Nouveau film</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;" (ngSubmit)="add()">
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Affiche</label>
+              <div class="col-sm-9">
+                <input type="file" (change)="onFileChange($event)" [(ngModel)]="nouveauFilm.affiche" class="form-control" id="eampleInputUs"  name="affiche">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Titre</label>
+              <div class="col-sm-9">
+                <input type="text" style="font-size: 1.5em;" class="form-control" id="exampleInputUsername1" [(ngModel)]="nouveauFilm.titre" placeholder="titre"  name="titre">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Description</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsername2" [(ngModel)]="nouveauFilm.description" placeholder="Description"  name="description">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Acteur Principal</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsername3" [(ngModel)]="nouveauFilm.acteur_principal" placeholder="Acteur"  name="acteur">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Duree</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsername4" [(ngModel)]="nouveauFilm.duree" placeholder="Duree"  name="duree">
+              </div>
+            </div>
+            <button type="submit" (click)="add()" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="page ==='modifier'">
+    <div *ngIf="filmSelectionnee">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Modification Film</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px; ">
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Affiche</label>
+              <div class="col-sm-9">
+                <input type="file" (change)="onFileChangeEdit($event)" [(ngModel)]="filmSelectionnee.affiche" class="form-control" id="exampleInputUs"  name="affiche">
+                <p *ngIf="filmSelectionnee.affiche" style="margin-top: 10px;">
+                  Affiche actuelle : {{ extractFileName(filmSelectionnee.affiche) }}
+                </p>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Titre</label>
+              <div class="col-sm-9">
+                <input type="text" style="font-size: 1.5em;" [(ngModel)]="filmSelectionnee.titre" class="form-control" id="exampleInputUsername"  name="titre">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Description</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" [(ngModel)]="filmSelectionnee.description" class="form-control" id="exampleInputUsername5"  name="description">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Acteur Principal</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" [(ngModel)]="filmSelectionnee.acteur_principal" class="form-control" id="exampleInputUsername6"  name="acteur">
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Durée</label>
+              <div class="col-sm-9">
+                <input type="text"  style="font-size: 1.5em;" [(ngModel)]="filmSelectionnee.duree" class="form-control" id="exampleInputUsername7"  name="duree">
+              </div>
+            </div>
+            <button type="submit" (click)="update(filmSelectionnee.id,filmSelectionnee)" class="btn btn-primary mr-2">Update</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div *ngIf="page ==='suppression'">
+    <div *ngIf="filmSup">
+    <h2>Supprimer  film :</h2>
+    <p>{{ filmSup.titre }}</p>
+    <button (click)="delete(filmSup.id)">Confirmer</button>
+    <button (click)="annuler()">Annuler</button>
+  </div>
+</div>
+</div>
+

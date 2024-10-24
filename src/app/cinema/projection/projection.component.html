@@ -1,0 +1,162 @@
+<div class="content-wrapper">
+  <div *ngIf="page === 'liste'">
+    <div class="row">
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title" style="font-size: 1.8rem; float: left; color:blueviolet">Projections</h1>
+            <i (click)="pageAjout()" class="mdi mdi-plus-circle" style="float: right; color:green; font-size: 5em"></i>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr style="background-color: black; color: azure;">
+                  <th>
+                    N°
+                  </th>
+                  <th>
+                    Date
+                  </th>
+                  <th>
+                    Film
+                  </th>
+                  <th>
+                    Salle
+                  </th>
+                  <th>
+                    Heure
+                  </th>
+                  <th>
+                    Actions
+                  </th>
+                </tr>
+                </thead>
+                <tbody style="font-size: 1.8rem;">
+                <ng-container *ngFor="let projections of tableauProjections; let ind=index;">
+                  <tr>
+                    <td style="font-size: 1.5rem;">
+                      {{ind+1}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{projections.date}}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{ getFilmTitre(projections.film) }}
+                    </td>
+                    <td style="font-size: 1.5rem;" >
+                      {{ getSalleLibelle(projections.salle) }}
+                    </td>
+                    <td style="font-size: 1.5rem;">
+                      {{projections.heure}}
+                    </td>
+                    <th>
+                      <i style="color: green;" class="mdi mdi-brush" (click)="pageModif(projections)"></i>
+
+
+                      <i style="color: red;" class="mdi mdi-delete-forever" (click)="pageSup(projections)"></i>
+                    </th>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="page === 'ajout'">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Nouvelle Projection</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;">
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Date</label>
+              <div class="col-sm-9">
+                <input type="date"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsername" [(ngModel)]="nouvelleProjections.date" placeholder="Date"  name="date">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Film</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;  height: auto" [(ngModel)]="nouvelleProjections.film" name="film">
+                  <option *ngFor="let film of films" [value]="film.id">{{ film.titre }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Salle</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;height: auto" [(ngModel)]="nouvelleProjections.salle" name="salle" required>
+                  <option *ngFor="let salle of salles" [value]="salle.id">{{ salle.libelle }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Heure</label>
+              <div class="col-sm-9">
+                <input type="time"  style="font-size: 1.5em;" class="form-control" id="exampleInpuUsername" [(ngModel)]="nouvelleProjections.heure" placeholder="Heure"  name="heure">
+              </div>
+            </div>
+            <button type="submit" (click)="add()" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="projectionsSelectionne">
+    <!-- Votre formulaire d'ajout ici -->
+    <div class="col-md-8 mx-auto" style="justify-content: center;">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title" style="font-size: 2em; font-weight:900 ; color:blueviolet;">Modification Projection</h4><br><br><br><br>
+          <form class="forms-sample" style="margin: top 30px;">
+            <div class="form-group row"  >
+              <label for="exampleInputUsernam" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Date</label>
+              <div class="col-sm-9">
+                <input type="date"  style="font-size: 1.5em;" class="form-control" id="exampleInputUsernam" [(ngModel)]="projectionsSelectionne.date" placeholder="Date"  name="date">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="exampleInputUsername2" class="col-sm-3 col-form-label" style="font-size: 1.5em;">Film</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;" [(ngModel)]="projectionsSelectionne.film" name="film">
+                  <option *ngFor="let film of films" [value]="film.id">{{ film.titre }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Salle</label>
+              <div class="col-sm-9">
+                <select class="form-control" style="font-size: 1.2em;" [(ngModel)]="projectionsSelectionne.salle" name="nom" required>
+                  <option *ngFor="let salle of salles" [value]="salle.id">{{ salle.libelle }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row"  >
+              <label for="exampleInputUsername2" style="font-size: 1.5em;" class="col-sm-3 col-form-label">Heure</label>
+              <div class="col-sm-9">
+                <input type="time"  style="font-size: 1.5em;" class="form-control" id="exampleIpuUsername" [(ngModel)]="projectionsSelectionne.heure" placeholder="Heure"  name="heure">
+              </div>
+            </div>
+            <button type="submit" (click)="update(projectionsSelectionne.id,projectionsSelectionne)" class="btn btn-primary mr-2">Save</button>
+            <button class="btn btn-light" (click)="annuler()">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="page ==='suppression'">
+  <div *ngIf="projectionsSup">
+      <h2>Supprimer  projection ?</h2>
+          <button (click)="delete(projectionsSup.id)">Confirmer</button>
+          <button (click)="annuler()">Annuler</button>
+      </div>
+    </div>
+</div>
+
+
